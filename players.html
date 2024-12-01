@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Players</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+        }
+        .data {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            background: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Team Players</h1>
+        <div id="playerOutput"></div>
+    </div>
+    <script>
+        const API_KEY = '6e10a0f58amshcf806969abb4307p1da1d6jsn3df994634040';
+        const API_HOST = 'api-nba-v1.p.rapidapi.com';
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const teamId = urlParams.get('teamId');
+        const season = urlParams.get('season');
+
+        async function fetchPlayers(teamId, season) {
+            const url = `https://${API_HOST}/players?team=${teamId}&season=${season}`;
+            try {
+                const response = await fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        'x-rapidapi-key': API_KEY,
+                        'x-rapidapi-host': API_HOST
+                    }
+                });
+                const data = await response.json();
+                if (data.response.length) {
+                    displayPlayers(data.response);
+                } else {
+                    document.getElementById('playerOutput').innerHTML = `<p>No players found for this team.</p>`;
+                }
+            } catch (error) {
+                console.error('Error fetching players:', error);
+                document.getElementById('playerOutput').innerHTML = `<p>Error fetching players. Please try again later.</p>`;
+            }
+        }
+
+        function displayPlayers(players) {
+            const playerOutput = document.getElementById('playerOutput');
+            playerOutput.innerHTML = players.map(player => `
+                <div class="data">
+                    <p><strong>Name:</strong> ${player.firstname} ${player.lastname}</p>
+                    <p>Position: ${player.leagues.standard?.pos || 'N/A'}</p>
+                    <p>Jersey: ${player.leagues.standard?.jersey || 'N/A'}</p>
+                    <button onclick="redirectToStats(${player.id}, '${player.firstname} ${player.lastname}')">View Stats</button>
+                </div>
+            `).join('');
+        }
+
+        function redirectToStats(playerId, playerName) {
+            window.location.href = `stats.html?playerId=${playerId}&playerName=${encodeURIComponent(playerName)}&teamId=${teamId}&season=${season}`;
+        }
+
+        fetchPlayers(teamId, season);
+    </script>
+</body>
+</html>

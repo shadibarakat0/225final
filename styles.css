@@ -1,0 +1,129 @@
+/* Base Styles */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    color: #333;
+}
+
+/* Container */
+.container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+    background: #fff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+/* Title */
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #444;
+}
+
+/* Filters Section */
+#filters {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+#filters label {
+    margin-right: 10px;
+}
+
+#filters select, #filters button {
+    padding: 10px;
+    margin-right: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+#filters button {
+    background-color: #007BFF;
+    color: #fff;
+    cursor: pointer;
+}
+
+#filters button:hover {
+    background-color: #0056b3;
+}
+
+/* Aggregated Stats */
+.aggregated-stats {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.aggregated-stats h2 {
+    margin-bottom: 10px;
+}
+
+/* Data Cards */
+.data {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.data p {
+    margin: 5px 0;
+}
+
+.data button {
+    padding: 10px 20px;
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.data button:hover {
+    background-color: #218838;
+}
+
+/* Dynamic Styles */
+.dynamic-container {
+    background: #e3e3e3;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.dynamic-title {
+    text-align: center;
+    color: #555;
+    margin-bottom: 20px;
+}
+/* Left-Side Image */
+.left-image-container {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    width: 150px; /* Adjust size as needed */
+    height: auto;
+    z-index: 1; /* Keeps it on top of other elements */
+}
+
+.left-image-container img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px; /* Optional: Adds rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: Adds a shadow */
+}
+
+/* Container to ensure text stays away from the image */
+.container {
+    margin-left: 200px; /* Ensure content starts to the right of the image */
+    max-width: calc(100% - 200px); /* Adjust width to account for the image */
+}

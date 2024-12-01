@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NBA Standings</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+        }
+        .data {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            background: #f9f9f9;
+        }
+        select, button {
+            margin: 10px 0;
+            padding: 5px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>NBA Standings</h1>
+        <div id="filters">
+            <label for="seasonDropdown">Select a Season:</label>
+            <select id="seasonDropdown">
+                <option value="">-- Select a Season --</option>
+                <option value="2023">2023</option>
+                <option value="2022">2022</option>
+                <option value="2021">2021</option>
+                <option value="2020">2020</option>
+            </select>
+            <br/>
+            <button onclick="applyFilters()">View Standings</button>
+        </div>
+        
+        <div id="output"></div>
+    </div>
+    <script>
+        const API_KEY = '6e10a0f58amshcf806969abb4307p1da1d6jsn3df994634040';
+        const API_HOST = 'api-nba-v1.p.rapidapi.com';
+
+        async function fetchStandings(season) {
+            const url = `https://${API_HOST}/standings?league=standard&season=${season}`;
+            try {
+                const response = await fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        'x-rapidapi-key': API_KEY,
+                        'x-rapidapi-host': API_HOST
+                    }
+                });
+                const data = await response.json();
+                if (data.response.length) {
+                    displayStandings(data.response);
+                } else {
+                    document.getElementById('output').innerHTML = `<p>No standings available for the selected season.</p>`;
+                }
+            } catch (error) {
+                console.error('Error fetching standings:', error);
+                document.getElementById('output').innerHTML = `<p>Error fetching standings. Please try again later.</p>`;
+            }
+        }
+
+        function displayStandings(standings) {
+            const output = document.getElementById('output');
+            output.innerHTML = `
+                <h3>Standings</h3>
+                ${standings.map(team => `
+                    <div class="data">
+                        <p><strong>Team:</strong> ${team.team.name || 'N/A'}</p>
+                        <p>Conference Rank: ${team.conference.rank || 'N/A'}</p>
+                        <p>Wins: ${team.conference.win || 'N/A'}</p>
+                        <p>Losses: ${team.conference.loss || 'N/A'}</p>
+                        <button onclick="redirectToPlayers(${team.team.id})">View Players</button>
+                    </div>
+                `).join('')};
+            `;
+        }
+
+        function redirectToPlayers(teamId) {
+            const season = document.getElementById('seasonDropdown').value;
+            window.location.href = `players.html?teamId=${teamId}&season=${season}`;
+        }
+
+        function applyFilters() {
+            const season = document.getElementById('seasonDropdown').value;
+            if (!season) {
+                document.getElementById('output').innerHTML = `<p>Please select a season to view standings.</p>`;
+                return;
+            }
+            fetchStandings(season);
+        }
+    </script>
+</body>
+</html>
