@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Player Stats</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1 id="playerName">Player Stats</h1>
+        <div id="aggregatedStats"></div>
+        <div id="statsOutput"></div>
+    </div>
+    <script>
+        const API_KEY = '6e10a0f58amshcf806969abb4307p1da1d6jsn3df994634040';
+        const API_HOST = 'api-nba-v1.p.rapidapi.com';
+        src="dynamicStyles.js"
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const playerId = urlParams.get('playerId');
+        const playerName = urlParams.get('playerName');
+        const season = urlParams.get('season');
+        const teamId = urlParams.get('teamId');
+
+        document.getElementById('playerName').innerText = `Stats for ${playerName}`;
+
+        async function fetchPlayerStatsAndGames(playerId, teamId, season) {
+            const statsUrl = `https://${API_HOST}/players/statistics?id=${playerId}&season=${season}`;
+            const gamesUrl = `https://${API_HOST}/games?team=${teamId}&season=${season}`;
+
+            try {
+                const [statsResponse, gamesResponse] = await Promise.all([
+                    fetch(statsUrl, {
+                        method: 'GET',
+                        headers: {
+                            'x-rapidapi-key': API_KEY,
+                            'x-rapidapi-host': API_HOST
+                        }
+                    }),
+                    fetch(gamesUrl, {
+                        method: 'GET',
+                        headers: {
+                            'x-rapidapi-key': API_KEY,
+                            'x-rapidapi-host': API_HOST
+                        }
+                    })
+                ]);
+
+                const statsData = await statsResponse.json();
+                const gamesData = await gamesResponse.json();
+
+                if (statsData.response && gamesData.response) {
+                    displayAggregatedStats(statsData.response);
+                    displayStats(statsData.response, gamesData.response);
+                } else {
+                    document.getElementById('statsOutput').innerHTML = '<p>No stats or games available.</p>';
+                }
+            } catch (error) {
+                console.error('Error fetching player stats or games:', error);
+                document.getElementById('statsOutput').innerHTML = '<p>Error fetching stats or games. Please try again later.</p>';
+            }
+        }
+
+        function displayAggregatedStats(stats) {
+            const totalStats = stats.reduce(
+                (totals, stat) => {
+                    totals.points += parseFloat(stat.points || 0);
+                    totals.assists += parseFloat(stat.assists || 0);
+                    totals.rebounds += parseFloat(stat.totReb || 0);
+                    totals.gamesPlayed++;
+                    return totals;
+                },
+                { points: 0, assists: 0, rebounds: 0, gamesPlayed: 0 }
+            );
+
+            const aggregatedStats = `
+                <div class="aggregated-stats">
+                    <h2>Season Totals (${season})</h2>
+                    <p><strong>Games Played:</strong> ${totalStats.gamesPlayed}</p>
+                    <p><strong>Total Points:</strong> ${totalStats.points}</p>
+                    <p><strong>Total Assists:</strong> ${totalStats.assists}</p>
+                    <p><strong>Total Rebounds:</strong> ${totalStats.rebounds}</p>
+                    <p><strong>Points Per Game:</strong> ${(totalStats.points / totalStats.gamesPlayed).toFixed(2)}</p>
+                    <p><strong>Assists Per Game:</strong> ${(totalStats.assists / totalStats.gamesPlayed).toFixed(2)}</p>
+                    <p><strong>Rebounds Per Game:</strong> ${(totalStats.rebounds / totalStats.gamesPlayed).toFixed(2)}</p>
+                </div>
+            `;
+
+            document.getElementById('aggregatedStats').innerHTML = aggregatedStats;
+        }
+
+        function displayStats(stats, games) {
+            const gameMap = games.reduce((map, game) => {
+                map[game.id] = `${game.teams.visitors.name} vs ${game.teams.home.name}`;
+                return map;
+            }, {});
+
+            const statsOutput = document.getElementById('statsOutput');
+            statsOutput.innerHTML = stats.map(stat => `
+                <div class="data">
+                    <p><strong>Game:</strong> ${gameMap[stat.game.id] || 'Game details unavailable'}</p>
+                    <p><strong>Points:</strong> ${stat.points || 'N/A'}</p>
+                    <p><strong>Assists:</strong> ${stat.assists || 'N/A'}</p>
+                    <p><strong>Rebounds:</strong> ${stat.totReb || 'N/A'}</p>
+                    <p><strong>Minutes:</strong> ${stat.min || 'N/A'}</p>
+                </div>
+            `).join('');
+        }
+
+        fetchPlayerStatsAndGames(playerId, teamId, season);
+    </script>
+</body>
+</html>
