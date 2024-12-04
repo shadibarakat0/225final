@@ -1,129 +1,55 @@
-/* Base Styles */
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f9;
-    color: #333;
-}
-
-/* Container */
+/* Remove margins for better alignment with Bootstrap's grid system */
 .container {
-    max-width: 1200px;
-    margin: 20px auto;
-    padding: 20px;
-    background: #fff;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
+  margin-top: 50px; /* Adjust space for fixed logo */
 }
 
-/* Title */
-h1 {
-    text-align: center;
-    margin-bottom: 20px;
-    color: #444;
-}
-
-/* Filters Section */
-#filters {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 20px;
-}
-
-#filters label {
-    margin-right: 10px;
-}
-
-#filters select, #filters button {
-    padding: 10px;
-    margin-right: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-}
-
-#filters button {
-    background-color: #007BFF;
-    color: #fff;
-    cursor: pointer;
-}
-
-#filters button:hover {
-    background-color: #0056b3;
-}
-
-/* Aggregated Stats */
-.aggregated-stats {
-    background: #f8f9fa;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    margin-bottom: 20px;
-}
-
-.aggregated-stats h2 {
-    margin-bottom: 10px;
-}
-
-/* Data Cards */
+/* Add a shadow to team cards for a modern look */
 .data {
-    background: #fff;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 15px;
-    margin-bottom: 15px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: #f9f9f9;
+  border-radius: 0.5rem;
+  padding: 20px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Bootstrap-like shadow */
+  margin-bottom: 20px;
 }
 
-.data p {
-    margin: 5px 0;
+/* Improved hover effect */
+.data:hover {
+  background-color: #e6f7ff;
+  transform: scale(1.02); /* Slight zoom effect */
+  transition: transform 0.3s, background-color 0.3s;
 }
 
-.data button {
-    padding: 10px 20px;
-    background-color: #28a745;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
+/* Logo tweaks */
+img[alt="NBA Logo"] {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  width: 80px;
+  height: auto;
+  z-index: 1000;
+  background-color: white; /* Prevent overlap */
+  border-radius: 50%; /* Optional circular look */
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-.data button:hover {
-    background-color: #218838;
+/* Button updates */
+button {
+  padding: 10px 20px;
+  border-radius: 0.5rem;
+  background-color: #007bff; /* Bootstrap's primary color */
+  color: white;
+  border: none;
+  transition: background-color 0.3s, transform 0.2s;
 }
 
-/* Dynamic Styles */
-.dynamic-container {
-    background: #e3e3e3;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+button:hover {
+  background-color: #0056b3; /* Darker blue for hover */
+  transform: translateY(-2px); /* Subtle lift */
 }
-
-.dynamic-title {
-    text-align: center;
-    color: #555;
-    margin-bottom: 20px;
-}
-/* Left-Side Image */
-.left-image-container {
-    position: fixed;
-    top: 20px;
-    left: 20px;
-    width: 150px; /* Adjust size as needed */
-    height: auto;
-    z-index: 1; /* Keeps it on top of other elements */
-}
-
-.left-image-container img {
-    width: 100%;
-    height: auto;
-    border-radius: 8px; /* Optional: Adds rounded corners */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: Adds a shadow */
-}
-
-/* Container to ensure text stays away from the image */
-.container {
-    margin-left: 200px; /* Ensure content starts to the right of the image */
-    max-width: calc(100% - 200px); /* Adjust width to account for the image */
+.team-logo {
+  width: 100%; /* Ensures the image spans the full width of the card */
+  height: 150px; /* Sets a fixed height for consistency */
+  object-fit: contain; /* Ensures the image scales proportionally */
+  background-color: #f9f9f9; /* Optional: Adds a neutral background for logos */
+  padding: 10px; /* Optional: Adds padding around the logo */
 }
